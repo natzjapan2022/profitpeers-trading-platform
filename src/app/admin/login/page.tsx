@@ -39,13 +39,13 @@ export default function AdminLoginPage() {
     setIsLoading(true)
     setError('')
 
-    // Get credentials from environment variables
-    const adminUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME || 'whop_admin_2024'
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'WhopSecure2024Admin'
+    // Check credentials (hardcoded for reliability)
+    const validUsername = 'whop_admin_2024'
+    const validPassword = 'WhopSecure2024Admin'
 
     // Simulate authentication delay
     setTimeout(() => {
-      if (formData.username === adminUsername && formData.password === adminPassword) {
+      if (formData.username === validUsername && formData.password === validPassword) {
         // Set admin session with 24-hour expiration
         const sessionData = {
           isAdmin: true,
