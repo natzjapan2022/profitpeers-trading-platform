@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -14,42 +15,50 @@ import {
 } from 'lucide-react'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState<{ type: 'success' | 'error' | null, text: string }>({
-    type: null,
-    text: ''
-  })
+  const [error, setError] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }))
-    // Clear message when user starts typing
-    if (message.type) {
-      setMessage({ type: null, text: '' })
+    // Clear error when user starts typing
+    if (error) {
+      setError('')
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError('')
 
-    // Simulate authentication process
-    setTimeout(() => {
-      setIsLoading(false)
-      setMessage({
-        type: 'success',
-        text: 'Login successful! Welcome to ProfitPeers.'
-      })
-      // Reset form
-      setFormData({ email: '', password: '' })
-    }, 1500)
+    // Check credentials
+    const validEmail = 'whop_admin_2024@profitpeers.site'
+    const validPassword = 'WhopSecure2024Admin'
+
+    if (formData.email === validEmail && formData.password === validPassword) {
+      // Store user session with 24-hour expiration
+      const session = {
+        email: formData.email,
+        timestamp: Date.now(),
+        expiresAt: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+      }
+
+      localStorage.setItem('userSession', JSON.stringify(session))
+      router.push('/dashboard')
+    } else {
+      setError('Invalid credentials. Please check your email and password.')
+    }
+
+    setIsLoading(false)
   }
 
   return (
@@ -67,19 +76,11 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Success/Error Message */}
-            {message.type && (
-              <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
-                message.type === 'success'
-                  ? 'bg-green-50 text-green-800 border border-green-200'
-                  : 'bg-red-50 text-red-800 border border-red-200'
-              }`}>
-                {message.type === 'success' ? (
-                  <CheckCircle size={20} className="text-green-600" />
-                ) : (
-                  <AlertCircle size={20} className="text-red-600" />
-                )}
-                <span className="text-sm font-medium">{message.text}</span>
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 rounded-lg flex items-center gap-3 bg-red-50 text-red-800 border border-red-200">
+                <AlertCircle size={20} className="text-red-600" />
+                <span className="text-sm font-medium">{error}</span>
               </div>
             )}
 
