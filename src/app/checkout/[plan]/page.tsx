@@ -295,6 +295,23 @@ export default function CheckoutPage() {
         </div>
       </section>
 
+      {/* Direct Whop purchase link */}
+      <section className="py-8 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-gray-600 mb-2">
+            Or you can purchase directly on Whop:
+          </p>
+          <Link
+            href="https://whop.com/profitpeers-trading-collective/profitpeers-master-access-pass/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-600 hover:text-primary-700 underline text-sm transition-colors"
+          >
+            Purchase on Whop →
+          </Link>
+        </div>
+      </section>
+
       <Footer />
     </div>
   )
